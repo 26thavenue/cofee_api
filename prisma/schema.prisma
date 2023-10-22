@@ -9,3 +9,40 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// Define the User model
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  order Order[]
+}
+
+// Define the Product model
+model Product {
+  id      Int    @id @default(autoincrement())
+  name    String
+  category String
+  description String
+  isAvailable Boolean
+  quantity Int
+  price Int
+
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  // Add other fields as needed
+
+}
+
+// Define the Order model
+model Order {
+  id  Int @id @default(autoincrement())
+  price Int
+  product_name Product[]
+  status String
+  cliet_name String
+  userId  Int
+  user User @relation(fields: [userId], references: [id])
+  // product_id Products[] @id @relation(fields: [productId], references: [id])
+}
