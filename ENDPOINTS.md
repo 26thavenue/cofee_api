@@ -1,14 +1,14 @@
-### Status
-- GET Status
+
   
 ### PRODUCTS
-- GET ALL PRODUCTS
-- GET ONE PRODUCT
-- UPDATE PRODUCT(Admin)
-- DELETE PRODUCT(Admin)
-- CREATE PRODUCT(Admin)
-  
-### CLIENTS
+- GET ALL PRODUCTS (Done)
+- GET ONE PRODUCT (Done)
+- UPDATE PRODUCT (Done)
+- DELETE PRODUCT (Done)
+- CREATE PRODUCT (Done)
+- PAGINATION   (Done)
+ 
+### USER
 - GET CLIENTS
 - REGISTER NEW CLIENT
   
@@ -20,12 +20,15 @@
 
 
 # MIDDLEWARES
-- isAdmin
-- Error Handler
-- Logger 
+- isAdmin (Done)
+- Error Handler (Done)
+- Logger (Done)
 
-Admin can create orders for clients from existing products
-The system can retrieve all the prodcts and its quantity
-Each order will have the client id to know who it belongs to 
-When creating the orderhe person has to input the products and the client id
+User can create orders for clients from existing products
+The system can retrieve all the prodcts and its quantity (Done)
+Each order will have the client name to know who it belongs to 
+When creating the order the person has to input the products and the client name
 The price will be generated after the client has created the order
+
+- SECURING THE API
+- RATE LIMITING
