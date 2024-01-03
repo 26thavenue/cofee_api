@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "npx tsc index.ts",
+    "start": "tsx watch src/index.ts",
     "dev": " tsx watch src/index.ts",
     "introspect": "drizzle-kit introspect:pg",
     "generate": "drizzle-kit generate:pg",
-    "migrate": "tsx src/db/migrate.ts"
+    "push": "drizzle-kit push:pg",
+    "migrate": "tsx migrate.ts"
   },
   "repository": {
     "type": "git",
@@ -22,8 +24,14 @@
   },
   "homepage": "https://github.com/26thavenue/cofee_api#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^20.10.4",
+    "@types/pg": "^8.10.9",
     "dotenv": "^16.3.1",
     "drizzle-kit": "^0.20.7",
     "express": "^4.18.2",
@@ -33,7 +41,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.29.1",
+    "jest": "^29.7.0",
     "morgan": "^1.10.0",
     "pg": "^8.11.3",
     "postgres": "^3.4.3"
