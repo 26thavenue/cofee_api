@@ -2,6 +2,7 @@ import {  eq, like } from 'drizzle-orm';
 import {staff} from '../../schema.ts'
 import {Request, Response} from 'express'
 import db from '../../db.ts'
+import { Staff } from '../types/index.ts';
 
 export const getAllStaffs = async(req:Request,res:Response) => {
  try {
@@ -36,36 +37,32 @@ export const getStaffById = async(req:Request, res:Response) =>{
   }
 };
 
-
-// export const getStaffByEmail =async (req:Request, res:Response) => {
-//     const{email}= req.query 
-    
-//     if(!email){
-//         return res.status(409).json('No email was found')
-//     }
-
-//     const user = await db.query.staff.findMany({
-//       where: eq(staff.email, email.toString())
-//     })
-    
-
-//     if(!user){
-//       return res.status(400).json('User does not exist')
-//     }
-//     return res.status(200).json(user)
-// }
-
 export const updateStaffById = async (req:Request, res:Response) => {
     const {id} = req.params
+    
     if(!id){
         return res.status(409).json('No id was found')
     }
+    try {
+      const checkValidId = await db.select().from(staff).where(eq(staff.id, Number(id))).execute()
+      if(!checkValidId){
+        return res.status(400).json('Invalid Id')
+      }
 
-    // await db
-    //     .update(user)
-    //     .set(updatedUser)
-    //     .where(eq(user.id, id))
-    //     .returning({ id: user.id,  email: user.email})
+      const updatedUser:Staff = req.body
+
+      await db
+          .update(staff)
+          .set(updatedUser)
+          .where(eq(staff.id, Number(id)))
+          .returning({ id: staff.id,  email: staff.email})
+      
+      return res.status(200).json({ success: true, message: "Update Successfully" });
+      
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Unable to update user" });
+    }
+    
 }
 
 export const deleteStaff = async(req:Request, res:Response) => {

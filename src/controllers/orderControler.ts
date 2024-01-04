@@ -2,6 +2,7 @@ import express from 'express'
 import {order, staff, product} from '../../schema.ts'
 import db from'../../db.ts'
 import { eq } from 'drizzle-orm'
+import {Order} from '../types/index.ts'
 
 
 export const getAllOrders = async(req:express.Request, res:express.Response)=> {
@@ -39,7 +40,6 @@ export const createNewOrder = async(req:express.Request, res:express.Response)=>
     // STEP 1: CHECK IF THEIR LOGGED IN AND EXTRACT THEIR ID FROM THE TOKEN AND USE IT TO CREATE THE ORDER
     const {customer_name,staff_id}: {customer_name: string, staff_id: number} = req.body
     
-
     try {
         
 
@@ -52,12 +52,33 @@ export const createNewOrder = async(req:express.Request, res:express.Response)=>
 
 }
 
-export const getAllStaffOrder = (req:express.Request, res:express.Response)=> {
 
 
-}
+export const updateOrderDetails = async(req:express.Request, res:express.Response )=>{
+    const {id} = req.params
+    
+    if(!id){
+        return res.status(409).json('No id was found')
+    }
+    try {
+      const checkValidId = await db.select().from(order).where(eq(order.id, Number(id))).execute()
+      if(!checkValidId){
+        return res.status(400).json('Invalid Id')
+      }
 
-export const updateOrderDetails = (req:express.Request, res:express.Response )=>{
+      const updatedOrder = req.body
+
+      await db
+          .update(order)
+          .set(updatedOrder)
+          .where(eq(order.id, Number(id)))
+          .returning({ id: order.id,  customer_name: order.customer_name})
+      
+      return res.status(200).json({ success: true, message: "Update Successfully" });
+      
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Unable to update user" });
+    }
 
 }
 

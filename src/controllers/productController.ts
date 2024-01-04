@@ -45,6 +45,11 @@ export const createProduct = async(req:express.Request, res:express.Response)=> 
     }
     try {
         // CHECK IF PRODUCT ALREADY EXISTS AND IF IT DOES INCREASE THE QUANTITY
+        // const checkProduct = await db.select().from(product).where(eq(product.productName, productName)).execute()
+        // if(checkProduct){ 
+        //   await db.update(product).set({quantity: checkProduct.quantity + 1}).where(eq(product.productName, productName)).execute()
+        //   return res.status(200).json('Product quantity increased')
+        // }
         const newProduct = await db.insert(product).values({productName,price,quantity}).execute()
 
         return res.status(200).json('User succesfully created')
@@ -56,6 +61,29 @@ export const createProduct = async(req:express.Request, res:express.Response)=> 
 }
 
 export const updateProductDetails = async(req:express.Request, res:express.Response )=>{
+  const {id} = req.params
+    
+    if(!id){
+        return res.status(409).json('No id was found')
+    }
+  
+    try {    
+      const checkValidId = await db.select().from(product).where(eq(product.id, Number(id))).execute()
+      if(!checkValidId){
+        return res.status(400).json('Invalid Id')
+      }
+      const updatedProduct = req.body
+      await db
+          .update(product)
+          .set(updatedProduct)
+          .where(eq(product.id, Number(id)))
+          .returning({ id: product.id,  productName: product.productName})
+      
+      return res.status(200).json({ success: true, message: "Update Successfully" });
+      
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Unable to update user" });
+    }
 
 }
 
