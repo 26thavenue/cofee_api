@@ -1,4 +1,4 @@
-import {  eq } from 'drizzle-orm';
+import {  eq, like } from 'drizzle-orm';
 import {staff} from '../../schema.ts'
 import {Request, Response} from 'express'
 import db from '../../db.ts'
@@ -15,14 +15,16 @@ export const getAllStaffs = async(req:Request,res:Response) => {
 }
 
 export const getStaffById = async(req:Request, res:Response) =>{
-  const { userId } = req.params;
+  const { id } = req.params;
+  
   try {
     const userById = await db
       .select()
       .from(staff)
-      .where(eq(staff.id, Number(userId)));
+      .where(eq(staff.id, Number(id)))
+      .execute();
     
-    if(!userId){
+    if(!id){
             res.status(400).json('Invalid Id')
     }
 
@@ -35,15 +37,23 @@ export const getStaffById = async(req:Request, res:Response) =>{
 };
 
 
-export const getStaffByEmail =async (req:Request, res:Response) => {
-    const{email} = req.body.email
+// export const getStaffByEmail =async (req:Request, res:Response) => {
+//     const{email}= req.query 
     
-    if(!email){
-        return res.status(409).json('No email was found')
-    }
-    await db.select().from(staff).where(eq(staff.email, email));
-    return res.status(200).json('Success')
-}
+//     if(!email){
+//         return res.status(409).json('No email was found')
+//     }
+
+//     const user = await db.query.staff.findMany({
+//       where: eq(staff.email, email.toString())
+//     })
+    
+
+//     if(!user){
+//       return res.status(400).json('User does not exist')
+//     }
+//     return res.status(200).json(user)
+// }
 
 export const updateStaffById = async (req:Request, res:Response) => {
     const {id} = req.params
@@ -58,5 +68,20 @@ export const updateStaffById = async (req:Request, res:Response) => {
     //     .returning({ id: user.id,  email: user.email})
 }
 
-export const deleteStaff = (req:Request, res:Response) => {}
+export const deleteStaff = async(req:Request, res:Response) => {
+  const { id } = req.params;
+  try {
+    const isValidId = await db.select().from(staff).where(eq(staff.id, Number(id))).execute()
+    if(!isValidId){
+      return res.status(400).json('Invalid Id')
+    }
+    await db.delete(staff).where(eq(staff.id, Number(id)));
+    return res
+      .status(200)
+      .json({ success: true, message: "Delete Successfully" });
+  } catch (error) {
+    return res.status(500).json({ success: true, message: "Cannot Delete" });
+  }
+}
+
 

@@ -3,25 +3,32 @@
 ### PRODUCTS
 - GET ALL PRODUCTS (Done)
 - GET ONE PRODUCT (Done)
-- UPDATE PRODUCT (Done)
+- UPDATE PRODUCT 
 - DELETE PRODUCT (Done)
 - CREATE PRODUCT (Done)
-- PAGINATION   (Done)
+- PAGINATION   
  
-### USER
-- GET CLIENTS
-- REGISTER NEW CLIENT
+### STAFF
+- GET ALL STAFF (DONE)
+- REGISTER (DONE)
+- LOGIN (Done)
+- GET STAFF BY ID (Done)
+- UPDATE STAFF DETAILS
+- DELETE STAFF (Done)
+- 
   
 ### ORDERS
 - CREATE A NEW ORDER
-- GET ALL ORDERS
+- GET ALL ORDERS (Done)
 - GET ALL STAFF'S ORDER
-- GET AN ORDER BY ID
+- GET AN ORDER BY ID (Done)
+- UPDATE AN ORDER
+- DELETE AN ORDER (Done)
 
 
 # MIDDLEWARES
 - isAdmin (Done)
-- Error Handler (Done)
+- Error Handler 
 - Logger (Done)
 
 User can create orders for clients from existing products

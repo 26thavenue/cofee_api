@@ -14,7 +14,7 @@ export const productRelations = relations(product, ({ many }) => ({
 }));
 
 export const staff = pgTable("staff", {
-  id: serial("id"),
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   password: text("password").notNull(),
@@ -26,12 +26,12 @@ export const staffRelations = relations(staff, ({ many }) => ({
 }));
 
 export const order = pgTable("order", {
-  id: serial("id"),
+  id: serial("id").primaryKey(),
   order_name:text('name'),
   customer_name: text("name").notNull(),
   ordered_at: timestamp('ordered_at'),
-  status:text("role").$type<"pending" | "completed">(),
-  staff_id:integer('staff_id').notNull()
+  status:text("role").$type<"pending" | "completed">().default("pending"),
+  staff_id:integer('staff_id')
 })
 
 export const orderRelations = relations(order, ({ one, many }) => ({
